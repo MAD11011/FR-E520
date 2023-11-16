@@ -1,8 +1,6 @@
 #include <cstdio>
 #include <cstdlib>
 #include <cstring>
-#include <thread>
-#include <chrono>
 #include <sec_api/stdio_s.h>
 #ifdef __MINGW32__
     #include "commWin32.h"
@@ -135,13 +133,11 @@ void ParamaterWrite(const char sNum[3],const char par[3],const char val[5]){
 }
 
 void ParameterRead(const char sNum[3],const char par[3]){
-    using namespace std::chrono_literals;
     char buffer[32] = {0};
     char dataBuf[16]= {0};
     char error = 0;
     unsigned long bytesRead = 0;
     DataRead(sNum,par);
-    // std::this_thread::sleep_for(20ms);
     SAwaitEOF();
     SRead(buffer,sizeof(buffer),&bytesRead);
     for(int i=0;i<bytesRead;i++){
@@ -158,10 +154,7 @@ void ParameterRead(const char sNum[3],const char par[3]){
         }
     }
     ReadPReplyData(CCode.ACK,sNum);
-    printf("DATA RECEVIED :::\n");
-    for(int i=0;i<4;i++){
-        printf("%d- %02X | %c\n",i,dataBuf[i],dataBuf[i]);
-    }
+    printf("Value of Pr %s is %.2f\n",par,((float)strtol(dataBuf,NULL,16))/100);
 
 
 }
