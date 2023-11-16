@@ -39,7 +39,8 @@ int main (int argc, char *argv[]) {
     }
     else{
         printf("Success\n");
-       // InverterReset("00");
+        // InverterReset("00");
+        ParamaterWrite("00","83","1D4C");
         ParameterRead("00","03");
     }
     ClosePort();

@@ -58,6 +58,7 @@ void DataWrite(const char sNum[3],const char ins[3],const char data[7],DataLengt
                                                 ,wTime
                                                 ,data);
     //skip first byte
+    printf(packetFrame);
     MChecksum(cSum,packetFrame+1);
     strcat(packetFrame,cSum);
     strncat(packetFrame,&Newline,1);
@@ -129,7 +130,32 @@ void InverterReset(const char sNum[3]){
 }
 
 void ParamaterWrite(const char sNum[3],const char par[3],const char val[5]){
-    DataWrite(sNum,par,"9696",DATA4BYTES);
+    enum DataLength length;
+    switch (strlen(val)) {
+        case 2:
+            length = DATA2BYTES;
+            break;
+        case 4:
+            length = DATA4BYTES;
+            break;
+        case 6:
+            length = DATA6BYTES;
+            break;
+        default:
+            fprintf(stderr,"Pr write legth is not valid\n");
+            return;
+    }
+    char response[32] = {'\0'};
+    unsigned long bytesRead = 0;
+    char error = 0;
+    DataWrite(sNum,par,val,length);
+    SAwaitEOF();
+    SRead(response,sizeof(response),&bytesRead);
+    if(WriteIReplyData(response,&error)){
+        fprintf(stderr,"Inverter Responded with NAK error = %c\n",error);
+        return;
+    }
+    printf("Pr written successfully\n");
 }
 
 void ParameterRead(const char sNum[3],const char par[3]){
