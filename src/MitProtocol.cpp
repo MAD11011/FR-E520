@@ -11,13 +11,13 @@
 #include "MitProtocol.h"
 
 struct ControlCode{
-    char STX = 0x02;
-    char ETX = 0x03;
-    char ENQ = 0x05;
-    char ACK = 0x06;
-    char LF  = 0x0A;
-    char CR  = 0x0D;
-    char NAK = 0x15;
+   const char STX = 0x02;
+   const char ETX = 0x03;
+   const char ENQ = 0x05;
+   const char ACK = 0x06;
+   const char LF  = 0x0A;
+   const char CR  = 0x0D;
+   const char NAK = 0x15;
 }CCode;
 
 int WaitingTime = 1;
